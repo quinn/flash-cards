@@ -43,7 +43,7 @@ func Index(hiragana string, romaji string, showRomaji bool) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"text-center p-12\"><h1 class=\"text-2xl\">Hiragana Flash Cards</h1>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"text-center p-12 h-screen\"><h1 class=\"text-2xl\">Hiragana Flash Cards</h1>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

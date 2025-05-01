@@ -4,7 +4,7 @@
 web: air
 
 # Tailwind CSS watcher
-tailwind: tailwindcss --input static/css/input.css --output static/css/output.css --watch
+tailwind: tailwindcss --input tailwind.css --output static/css/output.css -w=always
 
 # Templ watcher
 templ: templ generate --watch
