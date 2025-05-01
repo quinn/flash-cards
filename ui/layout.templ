@@ -1,0 +1,19 @@
+package ui
+
+templ Layout() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Hiragana Flash Cards</title>
+			<link rel="stylesheet" href="/static/css/output.css"/>
+			<script src="/static/js/htmx.min.js"></script>
+		</head>
+		<body class="bg-zinc-100">
+			<div class="flex flex-col items-center justify-center min-h-screen">
+				{ children... }
+			</div>
+		</body>
+	</html>
+}

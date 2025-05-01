@@ -1,11 +1,5 @@
-package main
-
-import (
-	"bufio"
-	"fmt"
-	"os"
-	"strings"
-)
+// Package flash provides hiragana to romaji conversion functionality
+package flash
 
 // Map of hiragana characters to their romaji equivalents
 var hiraganaToRomaji = map[string]string{
@@ -38,22 +32,13 @@ var hiraganaToRomaji = map[string]string{
 	"ぴゃ": "pya", "ぴゅ": "pyu", "ぴょ": "pyo",
 }
 
-func main() {
-	fmt.Println("Enter a single hiragana character:")
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
-	input = strings.TrimSpace(input)
+// GetRomaji looks up the romaji equivalent for a hiragana character
+func GetRomaji(hiragana string) (string, bool) {
+	romaji, exists := hiraganaToRomaji[hiragana]
+	return romaji, exists
+}
 
-	// Check if the input is a single character
-	if len([]rune(input)) != 1 {
-		fmt.Println("Please enter exactly one hiragana character.")
-		return
-	}
-
-	// Look up the romaji equivalent
-	if romaji, exists := hiraganaToRomaji[input]; exists {
-		fmt.Printf("The romaji for '%s' is: %s\n", input, romaji)
-	} else {
-		fmt.Printf("No romaji found for '%s'. Please enter a valid hiragana character.\n", input)
-	}
+// GetHiraganaToRomajiMap returns the map of hiragana to romaji
+func GetHiraganaToRomajiMap() map[string]string {
+	return hiraganaToRomaji
 }

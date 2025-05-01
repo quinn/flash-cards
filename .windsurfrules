@@ -1,3 +1,8 @@
 Use echo for routes
 
 Use templ for templates/views/components
+changes to templ code require running a code generator
+
+Do not use any js, except for htmx
+
+Use tailwind for styles
