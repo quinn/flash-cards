@@ -1,6 +1,8 @@
 package main
 
 import (
+	"embed"
+	"flag"
 	"math/rand"
 	"os"
 	"time"
@@ -13,7 +15,14 @@ import (
 	"github.com/quinn/flash-cards/ui"
 )
 
+//go:embed static
+var embeddedFiles embed.FS
+
 func main() {
+	// Command line flag to use embedded files
+	useEmbedded := flag.Bool("embedded", true, "Use embedded static files instead of filesystem")
+	flag.Parse()
+
 	// Initialize random with a source based on time
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
@@ -25,7 +34,11 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Serve static files
-	e.Static("/static", "static")
+	if *useEmbedded {
+		e.StaticFS("/static", echo.MustSubFS(embeddedFiles, "static"))
+	} else {
+		e.Static("/static", "static")
+	}
 
 	// Routes
 	e.GET("/", func(c echo.Context) error {
