@@ -1,31 +1,43 @@
 package ui
 
+import (
+	"github.com/quinn/flash-cards/flash"
+	"github.com/quinn/flash-cards/spec"
+	"github.com/quinn/flash-cards/uiutil"
+)
+
 // CardComponent is just the card itself for HTMX partial updates
-templ Card(hiragana string, romaji string, showRomaji bool) {
-	<div id="card-container" class="flex flex-col items-center justify-center">
-		<div
-			if showRomaji {
-				hx-get={ "/card?hiragana=" + hiragana + "&romaji=" + romaji + "&showRomaji=true" }
-			} else {
-				hx-get={ "/card?hiragana=" + hiragana + "&romaji=" + romaji + "&showRomaji=false" }
-			}
-			hx-trigger="click"
-			hx-swap="outerHTML"
-			hx-target="#card-container"
-			class="card w-48 h-48 flex flex-col items-center justify-center cursor-pointer text-center"
-		>
-			<div class="text-6xl select-none">{ hiragana }</div>
-			if showRomaji {
-				<div>{ romaji }</div>
+templ Card(pair spec.HiraganaRomajiPair, choices []string, answer string) {
+	{{
+		correct := flash.GetRomaji(pair.Hiragana) == answer
+	}}
+	<div id="card-container" class="flex flex-col items-center justify-stretch gap-3">
+		<div class="card w-full h-48 flex flex-col items-center justify-center text-center">
+			<div class="text-6xl select-none">{ pair.Hiragana }</div>
+		</div>
+		<div class="flex gap-3">
+			for _, choice := range choices {
+				<button
+					hx-get="/card"
+					hx-vals={ uiutil.JSON(spec.QS{
+						Hiragana: pair.Hiragana,
+						Answer:   choice,
+						Choices:  choices,
+					}) }
+					hx-trigger="click"
+					hx-swap="outerHTML"
+					hx-target="#card-container"
+					class={ "button", templ.KV("bg-green-500", correct && choice == answer), templ.KV("bg-red-500", !correct && choice == answer) }
+					disabled?={ correct || choice == answer }
+				>
+					{ choice }
+				</button>
 			}
 		</div>
-		<p>
-			Click the card to
-			if showRomaji {
-				see a new card
-			} else {
-				reveal romaji
-			}
-		</p>
+		<a
+			class={ "button w-full bg-green-500 text-center", templ.KV("opacity-0 disabled", !correct) }
+			href="/"
+			hx-boost="true"
+		>Continue</a>
 	</div>
 }

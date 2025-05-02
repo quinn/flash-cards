@@ -8,9 +8,12 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/quinn/flash-cards/ui"
+import (
+	"github.com/quinn/flash-cards/spec"
+	"github.com/quinn/flash-cards/ui"
+)
 
-func Index(hiragana string, romaji string, showRomaji bool) templ.Component {
+func Index(pair spec.HiraganaRomajiPair, choices []string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -43,11 +46,11 @@ func Index(hiragana string, romaji string, showRomaji bool) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-screen flex flex-col justify-center items-center\"><h1 class=\"text-2xl\">Hiragana Flash Cards</h1>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-screen flex flex-col justify-center items-center gap-3\"><h1 class=\"text-2xl\">Hiragana Flash Cards</h1>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = ui.Card(hiragana, romaji, showRomaji).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = ui.Card(pair, choices, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

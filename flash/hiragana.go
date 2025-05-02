@@ -33,9 +33,8 @@ var hiraganaToRomaji = map[string]string{
 }
 
 // GetRomaji looks up the romaji equivalent for a hiragana character
-func GetRomaji(hiragana string) (string, bool) {
-	romaji, exists := hiraganaToRomaji[hiragana]
-	return romaji, exists
+func GetRomaji(hiragana string) string {
+	return hiraganaToRomaji[hiragana]
 }
 
 // GetHiraganaToRomajiMap returns the map of hiragana to romaji

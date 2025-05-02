@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
 @utility card {
-  @apply bg-white dark:bg-black rounded-xl shadow-lg p-12;
+  @apply bg-white dark:bg-black rounded-xl shadow-lg p-12
+  border border-zinc-600;
+}
+
+@utility button {
+  @apply bg-white dark:bg-black rounded-md px-4 py-2 text-sm font-medium cursor-pointer
+    border border-zinc-600;
+
+  &:not(:disabled) {
+    @apply hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:text-white dark:hover:text-black;
+  }
 }

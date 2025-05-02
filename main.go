@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/quinn/flash-cards/flash"
 	"github.com/quinn/flash-cards/pages"
+	"github.com/quinn/flash-cards/spec"
 	"github.com/quinn/flash-cards/ui"
 )
 
@@ -47,48 +48,64 @@ func main() {
 // handleIndex serves the initial page load
 func handleIndex(c echo.Context, r *rand.Rand) error {
 	// Generate a random hiragana for initial page load
-	hiragana, romaji := getRandomHiragana(r)
-	component := pages.Index(hiragana, romaji, false)
+	pair := getRandomHiragana(r)
+	choices := getRomajiChoicesForHiragana(r, pair.Hiragana)
+	component := pages.Index(pair, choices)
 	return component.Render(c.Request().Context(), c.Response().Writer)
 }
 
 // handleCardHtmx handles HTMX interactions for card flips
 func handleCardHtmx(c echo.Context, r *rand.Rand) error {
-	// Extract values from the HTMX request
-	hiragana := c.QueryParam("hiragana")
-	romaji := c.QueryParam("romaji")
-	showRomaji := c.QueryParam("showRomaji") == "true"
-
-	if showRomaji {
-		// If we were showing romaji, get a new card and don't show romaji
-		hiragana, romaji = getRandomHiragana(r)
-		component := ui.Card(hiragana, romaji, false)
-		return component.Render(c.Request().Context(), c.Response().Writer)
-	} else {
-		// If we weren't showing romaji, keep the same card and show romaji
-		component := ui.Card(hiragana, romaji, true)
-		return component.Render(c.Request().Context(), c.Response().Writer)
+	var qs spec.QS
+	if err := c.Bind(&qs); err != nil {
+		return err
 	}
+
+	pair := spec.HiraganaRomajiPair{
+		Hiragana: qs.Hiragana,
+		Romaji:   qs.Answer,
+	}
+
+	component := ui.Card(pair, qs.Choices, qs.Answer)
+	return component.Render(c.Request().Context(), c.Response().Writer)
 }
 
-func getRandomHiragana(r *rand.Rand) (string, string) {
+func getRandomHiragana(r *rand.Rand) spec.HiraganaRomajiPair {
 	// Get the map from flash package
 	hiraganaMap := flash.GetHiraganaToRomajiMap()
 
 	// Convert map to slice of key-value pairs for random selection
-	hiraganaSlice := make([]struct {
-		Hiragana string
-		Romaji   string
-	}, 0, len(hiraganaMap))
+	hiraganaSlice := make([]spec.HiraganaRomajiPair, 0, len(hiraganaMap))
 
 	for k, v := range hiraganaMap {
-		hiraganaSlice = append(hiraganaSlice, struct {
-			Hiragana string
-			Romaji   string
-		}{k, v})
+		hiraganaSlice = append(hiraganaSlice, spec.HiraganaRomajiPair{Hiragana: k, Romaji: v})
 	}
 
 	// Select random entry
 	randomIndex := r.Intn(len(hiraganaSlice))
-	return hiraganaSlice[randomIndex].Hiragana, hiraganaSlice[randomIndex].Romaji
+	return hiraganaSlice[randomIndex]
+}
+
+func getRomajiChoicesForHiragana(r *rand.Rand, hiragana string) []string {
+	// Get the map from flash package
+	hiraganaMap := flash.GetHiraganaToRomajiMap()
+
+	// Get the romaji for the hiragana
+	romaji := hiraganaMap[hiragana]
+
+	// Get 4 other random romaji
+	otherRomaji := make([]string, 4)
+	for i := 0; i < 4; i++ {
+		otherRomaji[i] = hiraganaMap[getRandomHiragana(r).Hiragana]
+	}
+
+	// Add the correct romaji to the slice
+	romajiSlice := append(otherRomaji, romaji)
+
+	// Shuffle the slice
+	r.Shuffle(len(romajiSlice), func(i, j int) {
+		romajiSlice[i], romajiSlice[j] = romajiSlice[j], romajiSlice[i]
+	})
+
+	return romajiSlice
 }

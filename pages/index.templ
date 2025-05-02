@@ -1,12 +1,15 @@
 package pages
 
-import "github.com/quinn/flash-cards/ui"
+import (
+	"github.com/quinn/flash-cards/spec"
+	"github.com/quinn/flash-cards/ui"
+)
 
-templ Index(hiragana string, romaji string, showRomaji bool) {
+templ Index(pair spec.HiraganaRomajiPair, choices []string) {
 	@ui.Layout() {
-		<div class="h-screen flex flex-col justify-center items-center">
+		<div class="h-screen flex flex-col justify-center items-center gap-3">
 			<h1 class="text-2xl">Hiragana Flash Cards</h1>
-			@ui.Card(hiragana, romaji, showRomaji)
+			@ui.Card(pair, choices, "")
 		</div>
 	}
 }
