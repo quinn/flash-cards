@@ -2,7 +2,7 @@ package ui
 
 // CardComponent is just the card itself for HTMX partial updates
 templ Card(hiragana string, romaji string, showRomaji bool) {
-	<div class="card-container">
+	<div id="card-container">
 		<div
 			if showRomaji {
 				hx-get={ "/card?hiragana=" + hiragana + "&romaji=" + romaji + "&showRomaji=true" }
@@ -10,8 +10,8 @@ templ Card(hiragana string, romaji string, showRomaji bool) {
 				hx-get={ "/card?hiragana=" + hiragana + "&romaji=" + romaji + "&showRomaji=false" }
 			}
 			hx-trigger="click"
-			hx-swap="outerHTML target:#card-container"
-			id="card-container"
+			hx-swap="outerHTML"
+			hx-target="#card-container"
 			class="mt-8 bg-white rounded-xl shadow-lg p-12 w-48 h-48 flex items-center justify-center cursor-pointer transition-all hover:bg-zinc-200 focus:outline-none focus:ring-2 select-none"
 		>
 			<div>

@@ -30,7 +30,7 @@ func Card(hiragana string, romaji string, showRomaji bool) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"card-container\"><div")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"card-container\"><div")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -71,7 +71,7 @@ func Card(hiragana string, romaji string, showRomaji bool) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " hx-trigger=\"click\" hx-swap=\"outerHTML target:#card-container\" id=\"card-container\" class=\"mt-8 bg-white rounded-xl shadow-lg p-12 w-48 h-48 flex items-center justify-center cursor-pointer transition-all hover:bg-zinc-200 focus:outline-none focus:ring-2 select-none\"><div><div class=\"text-6xl text-zinc-800 select-none\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " hx-trigger=\"click\" hx-swap=\"outerHTML\" hx-target=\"#card-container\" class=\"mt-8 bg-white rounded-xl shadow-lg p-12 w-48 h-48 flex items-center justify-center cursor-pointer transition-all hover:bg-zinc-200 focus:outline-none focus:ring-2 select-none\"><div><div class=\"text-6xl text-zinc-800 select-none\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"os"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -35,8 +36,12 @@ func main() {
 		return handleCardHtmx(c, r)
 	})
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + port))
 }
 
 // handleIndex serves the initial page load
