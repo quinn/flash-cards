@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+@utility card {
+  @apply bg-white dark:bg-black rounded-xl shadow-lg p-12;
+}
